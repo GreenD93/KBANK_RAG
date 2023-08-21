@@ -5,11 +5,12 @@ from selenium.webdriver.common.by import By
 
 import csv
 
-def click_btn_more():
+def click_btn_more(driver):
     while True:
         try:
             btn_tag = driver.find_element(By.CLASS_NAME, "btn_more")
             btn_tag.click()
+            driver.implicitly_wait(3)
         except:
             break
     pass
@@ -53,7 +54,7 @@ for i in range(len(li_tags)):
 
     print(category)
 
-    click_btn_more()  # 더보기 버튼 클릭 전부하기
+    click_btn_more(driver)  # 더보기 버튼 클릭 전부하기
 
     driver.implicitly_wait(3)
 
@@ -86,6 +87,7 @@ for i in range(len(li_tags)):
 
     driver.get(kbank_qa_url)
 
+# write csv
 with open('kbank_qa_dataset.csv', 'w', encoding='utf-8', newline='') as f:
 
     writer = csv.writer(f, delimiter='|')
