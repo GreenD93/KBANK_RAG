@@ -8,7 +8,8 @@ PROMPT_DICT = {
         "서비스 센터 직원처럼 응답해주세요.\n\n"
         "응답할 때, 모든 문서를 참고하세요.\n"
         "응답할 때, 상품정보를 참고하세요.\n"
-        "응답할 때, Instruction에 대한 내용에 대해서만 간략하게 응답해주세요.\n"
+        "응답할 때, 금리와 관련이 있는 질문은 반드시 금리도 함께 알려주세요.\n"
+        "응답할 때, Instruction에 대한 내용을 짧게 정리해주세요.\n\n"
         "### 문서 :\n{docs}\n\n"
         "### 상품정보 :\n{prd_info}\n\n"
         "### Instruction(명령어):\n{instruction}\n\n### Response(응답):"
@@ -30,8 +31,8 @@ class SearchHandler:
             "챌린지박스" : ["챌린지박스","챌박"],
             "MY입출금통장": ["MY입출금통장","입출금통장"],
             "코드K정기예금": ["코드K정기예금","정기예금","예금"],
+            "주거래자유적금": ["주거래우대자유적금","주거래적금","주거래"],
             "코드K자유적금": ["코드K자유적금","자유적금"],
-            "주거래우대자유적금": ["주거래우대자유적금","주거래적금"],
             "아파트담보대출": ["아파트담보대출","아담대"],
             "전세대출": ["전세대출","전세"],
             "예금적금담보대출": ["예금적금담보대출"],
@@ -95,7 +96,7 @@ class SearchHandler:
             docs.append(doc)
         
         return docs
-    
+         
     def make_request(self, query, thresh=50):
         
         embed = self.get_embedding(query)
@@ -114,7 +115,7 @@ class SearchHandler:
         else:
             
             if prd != None:
-                prd_info = self.prd_infos[prd]
+                prd_info = prd + ':\n' + self.prd_infos[prd]
             else:
                 prd_info = None
 
@@ -143,6 +144,8 @@ class SearchHandler:
         request = self.make_request(query)
         
         code, prompt = request['code'], request['prompt']
+        
+        print(prompt)
         
         if code == 1:
             
