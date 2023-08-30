@@ -65,7 +65,9 @@ class SearchHandler:
         pass
     
     def get_embedding(self, query):
-        return self.model.encode(query)
+        embed = self.model.encode(query)
+        embed = np.array(embed).reshape(1, -1)
+        return embed
         
     def search_prd(self, query):
         
@@ -100,7 +102,6 @@ class SearchHandler:
     def make_request(self, query, thresh=50):
         
         embed = self.get_embedding(query)
-        embed = np.array(embed).reshape(1,-1)
         
         docs = self.search_docs(embed, thresh)
         prd = self.search_prd(query)
